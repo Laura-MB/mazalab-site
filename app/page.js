@@ -202,43 +202,47 @@ MAZALab is an advisory initiative focused on the strategic and responsible deplo
         </div>
       </section>
 
-      <section id="contact" className="section-block">
-        <div className="section-inner">
-          <div className="section-header">
-            <div className="pill">Contact</div>
-          </div>
+<section id="contact" className="section-block">
+  <div className="section-inner">
+    <div className="section-header">
+      <div className="pill">Contact</div>
+    </div>
 
-          <div className="content-panel">
-            <h2 className="section-title">Start the conversation.</h2>
+    <div className="content-panel">
+      <h2 className="section-title">Start the conversation.</h2>
 
-<form className="contact-form">
-  <input
-    type="text"
-    name="name"
-    placeholder="Your name"
-    required
-  />
+      <form
+        action="https://formspree.io/f/mkoqvrqr"
+        method="POST"
+        className="contact-form"
+      >
+        <input
+          type="text"
+          name="name"
+          placeholder="Your name"
+          required
+        />
 
-  <input
-    type="email"
-    name="email"
-    placeholder="Your email"
-    required
-  />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your email"
+          required
+        />
 
-  <textarea
-    name="message"
-    placeholder="Your message"
-    rows="5"
-    required
-  />
+        <textarea
+          name="message"
+          placeholder="Your message"
+          rows="5"
+          required
+        />
 
-  <button type="submit">Send message</button>
-</form>
-            
-          </div>
-        </div>
-      </section>
+        <button type="submit">Send message</button>
+      </form>
+
+    </div>
+  </div>
+</section>
 
       <footer className="footer">
         <div className="footer-main">
