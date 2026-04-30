@@ -77,22 +77,19 @@ export default function MazaLab() {
     <div className="site-shell">
       <div className="noise-overlay" />
 
-      <nav className="topbar">
-        <div className="topbar-inner">
-          <a href="#hero" className="brand">
-            MAZALab
-          </a>
+     <nav className="topbar"> 
+  <div className="topbar-inner"> 
+    <a href="#hero" className="brand"> MAZALab </a> 
+    <div className="nav-links"> 
+      <a href="#hero">Home</a> 
+      <a href="#about">About</a> 
+      <a href="#services">Our Services</a> 
+      <a href="#products">Our Products</a> {/* <--- AGREGAR ESTA LÍNEA */}
+      <a href="#contact">Contact</a> 
+    </div> 
+  </div> 
+</nav>
 
-          <div className="nav-links">
-            <a href="#hero">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Our Services</a>
-            <a href="#contact">Contact</a>
-          </div>
-
-          
-        </div>
-      </nav>
 
       <section id="hero" className="hero">
         <div className="hero-content">
@@ -201,6 +198,34 @@ MAZALab is an advisory initiative focused on the strategic and responsible deplo
           </div>
         </div>
       </section>
+
+   <section id="products" className="section-block">
+  <div className="section-inner">
+    <div className="section-header">
+      <div className="pill">Our Products</div>
+    </div>
+    <div className="services-stack">
+      {/* Producto 1 */}
+      <article className="service-row">
+        <div className="service-graphic" style={{ background: 'linear-gradient(45deg, #111, #222)', border: '1px solid #333' }} />
+        <div className="service-copy">
+          <div className="pill">MAZAShield</div>
+          <h3> Comprehensive security and governance toolkit for enterprise AI deployments. </h3>
+        </div>
+      </article>
+
+      {/* Producto 2 */}
+      <article className="service-row reverse">
+        <div className="service-copy">
+          <div className="pill">AI Auditor</div>
+          <h3> Automated framework for independent oversight and compliance tracking. </h3>
+        </div>
+        <div className="service-graphic" style={{ background: 'linear-gradient(45deg, #222, #111)', border: '1px solid #333' }} />
+      </article>
+    </div>
+  </div>
+</section>
+   
 
 <section id="contact" className="section-block">
   <div className="section-inner">
