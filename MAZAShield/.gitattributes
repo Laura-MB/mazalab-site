@@ -1,0 +1,2 @@
+# Husky shell hooks must stay LF so Git Bash / MSYS interpret the shebang on Windows.
+.husky/* text eol=lf

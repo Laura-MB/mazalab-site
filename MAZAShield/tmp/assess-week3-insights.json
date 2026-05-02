@@ -1,0 +1,35 @@
+{
+  "domain": "gaming",
+  "entities": [
+    {
+      "id": "week3-apex-001",
+      "type": "person",
+      "displayName": "Week-3 Apex Player",
+      "aliases": ["apex_player_7", "w3ap"],
+      "attributes": {
+        "nationality": "MX",
+        "fraud_pattern": "account takeover, device overlap, ato_signals",
+        "chargeback": "disputed deposit, chargeback_history_90d=3",
+        "bonus_abuse": "rollover arb, sticky extraction, linked_account_ids=cluster-4",
+        "velocity": "stake ramp, session binge, bet_velocity_7d=high",
+        "device_fingerprint": "shared across accounts",
+        "aml_alert": "true",
+        "responsible_gaming": "limit breach, loss_chasing_flag=true"
+      },
+      "tags": ["gaming", "fraud-ring", "bonus-abuse", "session-binge", "apex-case"],
+      "sources": [
+        {
+          "sourceId": "src-demo-week3",
+          "sourceName": "assess-week3-demo",
+          "sourceType": "internal",
+          "collectedAt": "2026-04-17T12:00:00Z",
+          "confidence": 0.92
+        }
+      ],
+      "confidence": { "score": 0.9, "lastUpdatedAt": "2026-04-17T12:00:00Z" },
+      "firstSeenAt": "2026-04-17T12:00:00Z",
+      "lastSeenAt": "2026-04-17T12:00:00Z"
+    }
+  ],
+  "context": { "correlationId": "week3-apex-demo-001" }
+}

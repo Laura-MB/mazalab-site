@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAZA Shield • Gaming Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .ribbon { background: linear-gradient(90deg, #10b981, #34d399); }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <!-- Top Ribbon -->
+  <div class="ribbon text-black text-center py-1.5 text-sm font-medium tracking-wider">
+    MAZAShield by MAZALab
+  </div>
+
+  <div class="max-w-7xl mx-auto p-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-10">
+      <div>
+        <h1 class="text-5xl font-bold tracking-tight">MAZAShield</h1>
+        <p class="text-emerald-400 text-xl">Casino Risk Intelligence • Live Operations</p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Language -->
+        <div class="flex border border-zinc-700 rounded-2xl overflow-hidden">
+          <button onclick="setLang('en')" class="lang-btn px-4 py-2 hover:bg-zinc-800">EN</button>
+          <button onclick="setLang('es')" class="lang-btn px-4 py-2 hover:bg-zinc-800 bg-emerald-600">ES</button>
+          <button onclick="setLang('pt')" class="lang-btn px-4 py-2 hover:bg-zinc-800">PT</button>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" 
+                class="w-11 h-11 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 rounded-2xl">
+          <i id="theme-icon" class="fas fa-moon text-xl"></i>
+        </button>
+
+        <!-- Download Report -->
+        <div class="flex gap-2">
+          <button onclick="downloadReport('short')" 
+                  class="bg-white text-black px-5 py-3 rounded-2xl font-medium flex items-center gap-2 hover:bg-gray-200">
+            <i class="fas fa-download"></i> Short Report
+          </button>
+          <button onclick="downloadReport('full')" 
+                  class="bg-white text-black px-5 py-3 rounded-2xl font-medium flex items-center gap-2 hover:bg-gray-200">
+            <i class="fas fa-download"></i> Full Report
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Run Demo Button -->
+    <div class="flex justify-center mb-12">
+      <button onclick="runFullDemo()" 
+              class="bg-emerald-500 hover:bg-emerald-600 text-black text-xl font-semibold px-12 py-6 rounded-3xl flex items-center gap-4 shadow-lg shadow-emerald-500/30">
+        <i class="fas fa-play"></i>
+        RUN FULL DEMO
+      </button>
+    </div>
+
+    <!-- Results Area -->
+    <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Se llena con JavaScript -->
+    </div>
+  </div>
+
+  <script>
+    let currentTheme = 'dark';
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.classList.toggle('light', currentTheme === 'light');
+      document.getElementById('theme-icon').classList.toggle('fa-moon', currentTheme === 'dark');
+      document.getElementById('theme-icon').classList.toggle('fa-sun', currentTheme === 'light');
+    }
+
+    function setLang(lang) {
+      alert(`Idioma cambiado a: ${lang.toUpperCase()} (Demo - funcionalidad completa en próxima versión)`);
+    }
+
+    function downloadReport(type) {
+      const filename = type === 'short' ? 'MAZA_Shield_Short_Report.pdf' : 'MAZA_Shield_Full_Report.pdf';
+      alert(`Descargando ${filename}...\n\n(En la versión real se genera PDF con páginas numeradas)`);
+    }
+
+    function runFullDemo() {
+      const results = document.getElementById('results');
+      results.classList.remove('hidden');
+      results.innerHTML = `
+        <div class="bg-zinc-900 rounded-3xl p-8 border border-zinc-700">
+          <h3 class="text-emerald-400 font-medium mb-4">Player #87421</h3>
+          <p class="text-6xl font-bold text-red-500">92</p>
+          <p class="text-zinc-400">High Risk - Possible Chip Dumping + Alias Network</p>
+        </div>
+        <div class="bg-zinc-900 rounded-3xl p-8 border border-zinc-700">
+          <h3 class="text-emerald-400 font-medium mb-4">Player #31902</h3>
+          <p class="text-6xl font-bold text-amber-400">85</p>
+          <p class="text-zinc-400">Session Tilt Detected - RG Alert</p>
+        </div>
+        <div class="bg-zinc-900 rounded-3xl p-8 border border-zinc-700">
+          <h3 class="text-emerald-400 font-medium mb-4">Player #65219</h3>
+          <p class="text-6xl font-bold text-purple-400">71</p>
+          <p class="text-zinc-400">Promo Rail Stack + Syndicate Pattern</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

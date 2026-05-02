@@ -1,0 +1,12 @@
+const fs = require("fs");
+const html = fs.readFileSync("demo/gaming-dashboard.html", "utf8");
+console.log("langToggle present:", /id="langToggle"/.test(html));
+console.log("themeToggle present:", /id="themeToggle"/.test(html));
+console.log("I18N dictionary present:", /const I18N = \{/.test(html));
+console.log("applyLanguage present:", /function applyLanguage/.test(html));
+console.log("persistLanguage present:", /function persistLanguage/.test(html));
+console.log("localStorage key:", /mazalab\.lang/.test(html));
+console.log("data-i18n usages:", (html.match(/data-i18n=/g) || []).length);
+console.log("data-i18n-attr usages:", (html.match(/data-i18n-attr=/g) || []).length);
+console.log("t(...) call sites:", (html.match(/\bt\(\s*["']/g) || []).length);
+console.log("themeReapply hook:", /window\.__themeReapply/.test(html));

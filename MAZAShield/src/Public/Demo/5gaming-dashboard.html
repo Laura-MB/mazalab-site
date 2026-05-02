@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAZAShield • Gaming Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <!-- Top Ribbon -->
+  <div class="bg-zinc-900 border-b border-zinc-700 py-3 text-center">
+    <div class="inline-flex items-center gap-3 text-2xl font-light tracking-widest">
+      <span class="font-bold text-white">MAZA</span>
+      <span class="font-thin text-zinc-300">SHIELD</span>
+      <span class="text-xs text-zinc-500 align-super">by MAZALab</span>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto p-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-12">
+      <div>
+        <h1 class="text-6xl font-bold tracking-tighter">
+          <span class="font-bold">MAZA</span><span class="font-thin text-zinc-300">SHIELD</span>
+        </h1>
+        <p class="text-zinc-400 text-2xl mt-1">Casino Risk Intelligence • Live Operations</p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex border border-zinc-700 rounded-3xl overflow-hidden">
+          <button onclick="setLang('en')" class="lang-btn px-5 py-3 hover:bg-zinc-800">EN</button>
+          <button onclick="setLang('es')" class="lang-btn px-5 py-3 hover:bg-zinc-800 bg-emerald-600">ES</button>
+          <button onclick="setLang('pt')" class="lang-btn px-5 py-3 hover:bg-zinc-800">PT</button>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" 
+                class="w-12 h-12 flex items-center justify-center bg-zinc-900 hover:bg-zinc-800 rounded-2xl text-2xl">
+          <i id="theme-icon" class="fas fa-moon"></i>
+        </button>
+
+        <!-- Download Report -->
+        <div class="relative group">
+          <button onclick="toggleReportMenu()" 
+                  class="bg-white text-black px-6 py-4 rounded-3xl font-medium flex items-center gap-2 hover:bg-gray-100">
+            <i class="fas fa-download"></i> Download Report
+          </button>
+          
+          <!-- Dropdown -->
+          <div id="report-menu" class="hidden absolute right-0 mt-2 w-56 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-xl py-2 z-50">
+            <button onclick="downloadReport('brief')" class="w-full text-left px-6 py-3 hover:bg-zinc-800">Brief Report</button>
+            <button onclick="downloadReport('full')" class="w-full text-left px-6 py-3 hover:bg-zinc-800">Full Report</button>
+          </div>
+        </div>
+
+        <!-- Run Demo -->
+        <button onclick="runFullDemo()" 
+                class="bg-emerald-600 hover:bg-emerald-500 text-black px-8 py-4 rounded-3xl font-semibold flex items-center gap-3">
+          <i class="fas fa-play"></i> RUN DEMO
+        </button>
+      </div>
+    </div>
+
+    <!-- Results Area -->
+    <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- JS llenará aquí -->
+    </div>
+  </div>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      document.documentElement.classList.toggle('light');
+      const icon = document.getElementById('theme-icon');
+      if (icon.classList.contains('fa-moon')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    }
+
+    // Language Toggle
+    function setLang(lang) {
+      alert(`🌐 Idioma cambiado a: ${lang.toUpperCase()}\n\n(En producción cambiará todo el texto)`);
+    }
+
+    // Report Menu
+    function toggleReportMenu() {
+      const menu = document.getElementById('report-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    function downloadReport(type) {
+      const name = type === 'brief' ? 'MAZAShield_Brief_Report.pdf' : 'MAZAShield_Full_Report.pdf';
+      alert(`📄 Descargando ${name}...\n\n(PDF blanco con páginas numeradas - listo para producción)`);
+      document.getElementById('report-menu').classList.add('hidden');
+    }
+
+    // Run Demo
+    function runFullDemo() {
+      const results = document.getElementById('results');
+      results.classList.remove('hidden');
+      results.innerHTML = `
+        <div class="bg-zinc-900 border border-zinc-700 rounded-3xl p-8">
+          <h3 class="text-emerald-400 font-medium">Player #87421</h3>
+          <p class="text-6xl font-bold text-red-500 mt-4">92</p>
+          <p class="text-zinc-400 mt-2">Chip Dumping + Alias Network Detected</p>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-700 rounded-3xl p-8">
+          <h3 class="text-emerald-400 font-medium">Player #31902</h3>
+          <p class="text-6xl font-bold text-amber-400 mt-4">85</p>
+          <p class="text-zinc-400 mt-2">Session Tilt - RG Intervention Recommended</p>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-700 rounded-3xl p-8">
+          <h3 class="text-emerald-400 font-medium">Player #65219</h3>
+          <p class="text-6xl font-bold text-purple-400 mt-4">71</p>
+          <p class="text-zinc-400 mt-2">Promo Rail Stack + Syndicate Pattern</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

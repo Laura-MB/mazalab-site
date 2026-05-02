@@ -1,0 +1,33 @@
+{
+  "name": "mazalab",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "MAZALab Risk Intelligence platform foundation",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "changelog": "standard-version --release-as patch --skip.commit --skip.tag",
+    "dev": "tsx watch src/index.ts",
+    "prepare": "husky",
+    "release": "standard-version",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.2",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.0",
+    "husky": "^9.1.7",
+    "standard-version": "^9.5.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAZAShield • Casino Risk Intelligence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .title-font { font-family: 'Inter', sans-serif; letter-spacing: -0.04em; }
+
+    /* LIGHT MODE - FULL BODY */
+    .light {
+      background-color: #f8f7f0 !important;
+      color: #1f2529 !important;
+    }
+    .light .bg-zinc-900,
+    .light .bg-zinc-800,
+    .light .bg-black,
+    .light .bg-zinc-950 {
+      background-color: #f8f7f0 !important;
+    }
+    .light .text-white,
+    .light .text-zinc-100,
+    .light .text-zinc-200 {
+      color: #1f2529 !important;
+    }
+    .light .text-zinc-400 {
+      color: #4b5563 !important;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen transition-all">
+
+  <!-- Ribbon -->
+  <div class="bg-zinc-900 border-b border-zinc-700 py-3 text-center">
+    <div class="inline-flex items-center gap-3 text-2xl font-light tracking-widest">
+      <span class="font-bold">MAZAShield</span>
+      <span class="text-xs text-zinc-500 align-super">by MAZALab</span>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto p-8">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h1 class="title-font text-7xl font-bold tracking-tighter">MAZAShield</h1>
+        <p class="text-2xl text-zinc-400 mt-1">Casino Risk Intelligence • Live Operations</p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Language Dropdown -->
+<div class="relative">
+  <select onchange="setLang(this.value)" 
+          class="bg-zinc-900 border border-zinc-700 rounded-3xl px-6 py-3 text-white appearance-none cursor-pointer focus:outline-none w-28">
+    <option value="en" selected>EN</option>
+    <option value="es">ES</option>
+    <option value="pt">PT</option>
+  </select>
+</div>
+
+        <!-- Theme Toggle -->
+       <button onclick="toggleTheme()" class="w-12 h-12 flex items-center justify-center bg-zinc-900 hover:bg-zinc-800 border border-zinc-600 light:border-zinc-400 rounded-2xl text-2xl transition-all">
+          <i id="theme-icon" class="fas fa-moon"></i>
+        </button>
+
+        <!-- Download -->
+        <button onclick="toggleDownloadMenu()" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 light:bg-white light:border-zinc-400 light:text-zinc-900 px-6 py-4 rounded-3xl font-medium flex items-center gap-2 transition">
+          <i class="fas fa-download"></i> Download Report
+        </button>
+
+        <!-- Run Demo -->
+       <button onclick="runFullDemo()" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 light:bg-white light:border-zinc-400 light:text-zinc-900 px-8 py-4 rounded-3xl font-semibold flex items-center gap-3 transition">
+          <i class="fas fa-play"></i> RUN FULL DEMO
+        </button>
+      </div>
+    </div>
+
+    <!-- Real-time Status -->
+    <div class="bg-zinc-900 border border-emerald-500/30 rounded-3xl px-6 py-4 flex items-center justify-between mb-8 text-sm">
+      <div class="flex items-center gap-8">
+        <div><span class="text-emerald-400">●</span> Motor conectado</div>
+        <div>Latencia: <span class="text-emerald-400">412 ms</span></div>
+        <div>Último assessment hace <span id="seconds-ago">14</span> segundos</div>
+      </div>
+    </div>
+
+    <!-- KPI Strip -->
+    <div id="kpi-strip" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"></div>
+
+    <!-- Player Cards -->
+    <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+    <!-- Adaptive Combos -->
+    <div class="mt-16">
+      <h2 class="text-2xl font-semibold mb-6">Adaptive Combos Detectados</h2>
+      <div id="combos-panel" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+    </div>
+
+    <!-- Operator Playbook -->
+    <div class="mt-16">
+      <h2 class="text-2xl font-semibold mb-6">Operator Playbook</h2>
+      <div id="playbook-panel" class="space-y-4"></div>
+    </div>
+
+    <!-- Audit Log -->
+    <div class="mt-16">
+      <h2 class="text-2xl font-semibold mb-6">Audit Log Live Feed</h2>
+      <div id="audit-feed" class="bg-zinc-900 rounded-3xl p-6 max-h-96 overflow-auto text-sm"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = 'en';
+
+    function setLang(lang) {
+      currentLang = lang;
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('light');
+      const icon = document.getElementById('theme-icon');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    }
+
+    function toggleDownloadMenu() {
+      const choice = confirm("1 = Brief Report\n2 = Full Report\n\nChoose 1 or 2:");
+      if (choice) alert(`✅ ${choice === "1" ? "Brief" : "Full"} Report generated.`);
+    }
+
+    // ==================== CONEXIÓN REAL AL BACKEND ====================
+    async function runFullDemo() {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.classList.remove('hidden');
+      resultsDiv.innerHTML = `<p class="text-zinc-400">Calling MAZAShield backend on port 3010...</p>`;
+
+      try {
+        const response = await fetch('http://localhost:3010/assess', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            domain: "gaming",
+            entities: [
+              {
+                id: "player-87421",
+                type: "person",
+                displayName: "Marcus Vega",
+                aliases: ["M. Vega", "Marcus V."],
+                attributes: {
+                  nationality: "MX",
+                  chargeback: "multiple",
+                  bonus_abuse: "rollover_arb",
+                  velocity: "high"
+                },
+                tags: ["gaming", "high-velocity"],
+                confidence: { score: 0.88, lastUpdatedAt: "2026-04-28T19:00:00Z" },
+                firstSeenAt: "2026-04-01T00:00:00Z",
+                lastSeenAt: "2026-04-28T18:00:00Z"
+              }
+            ],
+            context: { correlationId: "demo-run-" + Date.now() }
+          })
+        });
+
+        if (!response.ok) throw new Error("Backend error " + response.status);
+
+        const data = await response.json();
+
+        let html = '';
+        (data.assessments || []).forEach(ass => {
+          const score = (ass.riskScore?.overall || 0).toFixed(0);
+          const level = (ass.riskScore?.level || 'MEDIUM').toUpperCase();
+          const color = level.includes('CRITICAL') ? 'red' : level.includes('HIGH') ? 'amber' : 'emerald';
+
+          html += `
+            <div class="bg-zinc-900 border border-${color}-500/30 rounded-3xl p-8">
+              <h3 class="text-2xl font-semibold">${ass.resolvedEntity?.canonicalEntity?.displayName || 'Player'}</h3>
+              <p class="text-5xl font-bold text-${color}-400 mt-2">${score}</p>
+              <p class="text-zinc-400 mt-3">${ass.assessmentSummary ? ass.assessmentSummary.substring(0, 90) + '...' : 'High Risk Pattern'}</p>
+              <button onclick="alert('Playbook opened')" class="mt-6 w-full py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">Ver Playbook</button>
+            </div>`;
+        });
+
+        resultsDiv.innerHTML = html || '<p class="text-zinc-400">No assessments returned.</p>';
+
+      } catch (err) {
+        resultsDiv.innerHTML = `<p class="text-red-400">Error connecting to backend: ${err.message}</p>`;
+        console.error(err);
+      }
+    }
+        // Render real data from backend
+        let html = '';
+        data.assessments.forEach(ass => {
+          const score = ass.riskScore.overall.toFixed(0);
+          const level = ass.riskScore.level.toUpperCase();
+          const color = level === 'CRITICAL' ? 'red' : level === 'HIGH' ? 'amber' : 'emerald';
+
+          html += `
+            <div class="bg-zinc-900 border border-${color}-500/30 rounded-3xl p-8">
+              <h3 class="text-2xl font-semibold">${ass.resolvedEntity?.canonicalEntity.displayName || 'Player'}</h3>
+              <p class="text-5xl font-bold text-${color}-400 mt-2">${score}</p>
+              <p class="text-zinc-400 mt-3">${ass.riskScore.explanation ? ass.riskScore.explanation.substring(0, 80) + '...' : 'High Risk Pattern'}</p>
+              <button onclick="alert('Playbook for this player opened')" class="mt-6 w-full py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">Ver Playbook</button>
+            </div>`;
+        });
+
+        resultsDiv.innerHTML = html || '<p class="text-zinc-400">No assessments returned.</p>';
+
+      } catch (err) {
+        resultsDiv.innerHTML = `<p class="text-red-400">Error connecting to backend: ${err.message}</p>`;
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>

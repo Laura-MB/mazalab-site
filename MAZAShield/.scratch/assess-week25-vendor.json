@@ -1,0 +1,53 @@
+{
+  "domain": "gaming",
+  "correlationId": "g2e-week25-vendor-collusion-001",
+  "entities": [
+    {
+      "id": "g2e-vendor-collusion-1",
+      "type": "person",
+      "displayName": "Diego R. Salazar",
+      "aliases": ["D. Salazar", "DRSalazar"],
+      "attributes": {
+        "vip_tier": "gold",
+        "kyc_status": "verified",
+        "fraud_pattern": "linked_chargebacks",
+        "chargeback": "disputed payment",
+        "stolen": "stolen instrument suspicion",
+        "vendor_partner": "rapid-aggregator-x",
+        "psp": "rapid-aggregator-x",
+        "aggregator_contract_status": "renewal-overdue",
+        "psp_certification": "expired",
+        "incident_history_12m": "data_event_2026q1, chargeback_spike_2026q2",
+        "session_length_avg_min": 75,
+        "bet_velocity_7d": "moderate",
+        "rollover_progress": 0.95,
+        "promo_redemptions_30d": 1,
+        "chargeback_history_90d": 7,
+        "disputed_deposits_90d": 5,
+        "device_fingerprint": "fp-vc-aff42",
+        "linked_account_ids": "g2e-vendor-collusion-1"
+      },
+      "tags": [
+        "gaming",
+        "fraud-ring",
+        "vendor-risk",
+        "high-risk-vendor",
+        "psp-incident",
+        "chargeback-cluster",
+        "g2e-week25"
+      ],
+      "sources": [
+        {
+          "sourceId": "src-gaming-week25",
+          "sourceName": "gaming-week25-curl",
+          "sourceType": "internal",
+          "collectedAt": "2026-04-17T00:00:00Z",
+          "confidence": 0.93
+        }
+      ],
+      "confidence": { "score": 0.9, "lastUpdatedAt": "2026-04-17T00:00:00Z" },
+      "firstSeenAt": "2026-04-17T00:00:00Z",
+      "lastSeenAt": "2026-04-17T00:00:00Z"
+    }
+  ]
+}

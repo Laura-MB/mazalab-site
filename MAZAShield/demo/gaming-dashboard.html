@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased dark" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="MAZA Shield — Explainable Risk Intelligence for Casino Operations. MAZALab."
+    />
+    <meta name="theme-color" content="#1F1F1F" id="meta-theme-color" />
+    <title>MAZA Shield · MAZALab</title>
+
+    <!-- Theme: dark default (charcoal void). Persists to localStorage. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("maza-shield.theme");
+          t = t === "light" || t === "dark" ? t : "dark";
+          document.documentElement.setAttribute("data-theme", t);
+          document.documentElement.classList.toggle("dark", t === "dark");
+          var m = document.getElementById("meta-theme-color");
+          if (m) m.setAttribute("content", t === "light" ? "#fdfaf0" : "#1F1F1F");
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+
+    <!-- Tailwind CDN — neutral shell: dark gray void #1F1F1F, cream #fdfaf0. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: ["class"],
+        safelist: [
+          "bg-emerald-500",
+          "bg-amber-500",
+          "bg-orange-600",
+          "bg-maza-carmine",
+          "border-emerald-500/40",
+          "border-amber-500/40",
+          "border-orange-600/40",
+          "border-maza-carmine/50",
+          "bg-neutral-800",
+          "dark:bg-neutral-700",
+        ],
+        theme: {
+          extend: {
+            colors: {
+              maza: {
+                void: "#1f1f1f",
+                cream: "#fdfaf0",
+                carmine: "#9F1239",
+              },
+            },
+            /* Inter — same family as https://mazalab.com (Next.js chunk uses Inter). */
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+              display: ["Inter", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 0 0 2px #525252, 0 4px 24px rgba(0, 0, 0, 0.28)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      html[data-theme="light"] {
+        color-scheme: light;
+      }
+      html[data-theme="dark"] {
+        color-scheme: dark;
+      }
+
+      /*
+       * Main title + header tagline — neutral palette only.
+       * Dark: cream wordmark; light: deep neutral on cream.
+       */
+      .maza-title-gradient {
+        color: #f5f5f5;
+        text-shadow: none;
+        filter: none;
+      }
+
+      html[data-theme="light"] .maza-title-gradient {
+        color: #1a1a1a;
+        text-shadow: none;
+        filter: none;
+      }
+
+      .header-tagline {
+        color: #d4d4d4;
+      }
+
+      html[data-theme="light"] .header-tagline {
+        color: #404040;
+        text-shadow: none;
+      }
+
+      .tier-bar-seg {
+        transition: width 0.35s ease, opacity 0.2s ease;
+      }
+
+      /* Export menu: ensure paint layer above main content (KPI strip, cards). */
+      .export-dropdown-panel {
+        z-index: 9999;
+      }
+
+      /* Top ribbon + hairline — same palette as main title wordmark only. */
+      #top-ribbon {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+      }
+      html[data-theme="light"] #top-ribbon {
+        color: #1a1a1a;
+        border-bottom-color: #1a1a1a;
+      }
+      html[data-theme="dark"] #top-ribbon {
+        color: #f5f5f5;
+        border-bottom-color: #f5f5f5;
+      }
+    </style>
+  </head>
+
+  <body
+    class="h-full min-h-screen bg-maza-cream font-sans text-neutral-900 transition-colors duration-200 dark:bg-maza-void dark:text-neutral-100"
+  >
+    <a
+      href="#main"
+      class="sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10000] focus:rounded-lg focus:bg-neutral-800 focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+      >Skip to content</a
+    >
+
+    <!-- z-0: main scroll area stays below the sticky header stack. -->
+    <div class="relative z-0 min-h-screen pb-16 lg:pb-10">
+      <!--
+        Header: very high z-index so dropdown (z-9999) always wins over KPI / sections.
+        No overflow-hidden on header (avoids clipping the menu).
+      -->
+      <header
+        class="sticky top-0 z-[8000] border-b border-neutral-300/80 bg-maza-cream/95 shadow-sm backdrop-blur-md dark:border-neutral-600/50 dark:bg-maza-void/95"
+      >
+        <div
+          id="top-ribbon"
+          class="bg-maza-cream px-4 py-1.5 text-center text-[11px] font-semibold uppercase tracking-widest dark:bg-maza-void"
+        >
+          <span id="ribbon-text">MAZAShield Casino Risk Intelligence by MAZALab</span>
+        </div>
+
+        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8 lg:py-6">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div class="min-w-0 flex-1 text-center lg:text-left">
+              <h1
+                class="font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl maza-title-gradient"
+              >
+                MAZAShield
+              </h1>
+              <p
+                id="header-tagline"
+                class="header-tagline mx-auto mt-1 max-w-2xl text-lg font-semibold tracking-tight sm:text-xl lg:mx-0"
+              >
+                Casino Risk Intelligence
+              </p>
+              <p
+                id="subtitle-text"
+                class="mx-auto mt-2 max-w-2xl text-base font-medium text-neutral-700 dark:text-neutral-400 lg:mx-0 lg:text-lg"
+              >
+                Explainable Risk Intelligence for Casino Operations
+              </p>
+              <p class="mt-3 font-mono text-xs text-neutral-600 dark:text-neutral-400 sm:text-sm">
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500" aria-hidden="true"></span>
+                  <span id="live-assess-label">Live assessment</span>:
+                  <code
+                    class="rounded bg-neutral-200/90 px-1.5 py-0.5 text-neutral-800 dark:bg-neutral-800/90 dark:text-neutral-200"
+                    >POST /assess</code
+                  >
+                </span>
+              </p>
+              <div class="mt-4 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+                <span
+                  class="inline-flex items-center rounded-full border border-neutral-400/60 bg-neutral-200/70 px-3 py-1 text-xs font-semibold text-neutral-800 dark:border-neutral-600 dark:bg-neutral-800/80 dark:text-neutral-200"
+                  id="g2e-badge"
+                >
+                  MAZA Shield v0.1 — Ready for G2E
+                </span>
+                <span class="text-xs text-neutral-500 dark:text-neutral-500" id="company-credit">MAZALab</span>
+              </div>
+            </div>
+
+            <!-- Toolbar: elevated stacking context; dropdown uses .export-dropdown-panel -->
+            <div
+              class="relative z-[9000] flex flex-shrink-0 flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:flex-col lg:items-end xl:flex-row xl:items-center"
+            >
+              <button
+                type="button"
+                id="btn-run-demo"
+                class="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-neutral-800 px-6 py-3 text-base font-semibold text-white shadow-soft transition hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 focus:ring-offset-maza-cream dark:focus:ring-offset-maza-void"
+              >
+                <span id="btn-run-label">Run Full Demo</span>
+              </button>
+
+              <div class="relative inline-flex" id="export-wrap">
+                <button
+                  type="button"
+                  id="btn-export-toggle"
+                  class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl border-2 border-neutral-400 bg-white px-4 py-3 text-sm font-semibold text-neutral-800 shadow-sm transition hover:border-neutral-500 hover:bg-maza-cream/80 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800/80 sm:w-auto"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                >
+                  <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <span id="export-btn-label">Export Report</span>
+                  <svg class="h-4 w-4 shrink-0 opacity-70" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <div
+                  id="export-menu"
+                  class="export-dropdown-panel absolute right-0 top-full mt-2 hidden min-w-[240px] rounded-xl border border-neutral-200 bg-white py-1 shadow-2xl ring-1 ring-black/5 dark:border-neutral-600 dark:bg-neutral-900 dark:ring-white/10"
+                  role="menu"
+                >
+                  <button
+                    type="button"
+                    role="menuitem"
+                    id="export-quick"
+                    class="block w-full px-4 py-3 text-left text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800/90"
+                  >
+                    <span id="export-quick-label" class="font-semibold">Quick Report PDF</span>
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    id="export-full"
+                    class="block w-full px-4 py-3 text-left text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800/90"
+                  >
+                    <span id="export-full-label" class="font-semibold">Full Report PDF</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-center gap-2 sm:justify-end">
+                <button
+                  type="button"
+                  id="btn-theme"
+                  class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-neutral-300 bg-white text-neutral-800 transition hover:border-neutral-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200"
+                  aria-label="Toggle theme"
+                >
+                  <svg class="hidden h-5 w-5 dark:block" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591z"
+                    />
+                  </svg>
+                  <svg class="h-5 w-5 dark:hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      fill-rule="evenodd"
+                      d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <div
+                  class="flex rounded-xl border border-neutral-300 bg-white p-0.5 dark:border-neutral-600 dark:bg-neutral-900"
+                  role="group"
+                  aria-label="Language"
+                >
+                  <button type="button" class="lang-pill rounded-lg px-2.5 py-1.5 text-xs font-semibold" data-lang="en">
+                    EN
+                  </button>
+                  <button type="button" class="lang-pill rounded-lg px-2.5 py-1.5 text-xs font-semibold" data-lang="es">
+                    ES
+                  </button>
+                  <button type="button" class="lang-pill rounded-lg px-2.5 py-1.5 text-xs font-semibold" data-lang="pt">
+                    PT
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main: explicit low stacking; never competes with header z-8000+. -->
+      <main id="main" class="relative z-0 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <div
+          id="empty-state"
+          class="rounded-2xl border border-dashed border-neutral-400/50 bg-white/60 p-8 text-center dark:border-neutral-600/45 dark:bg-neutral-900/50"
+        >
+          <p id="empty-msg" class="text-neutral-600 dark:text-neutral-400"></p>
+        </div>
+
+        <div id="dashboard" class="hidden space-y-8">
+          <section aria-labelledby="kpi-heading">
+            <h2 id="kpi-heading" class="sr-only">Key performance indicators</h2>
+            <div class="grid grid-cols-2 gap-3 md:grid-cols-4 lg:gap-4">
+              <div
+                class="rounded-2xl border border-neutral-300/90 bg-white p-4 shadow-sm dark:border-neutral-600/50 dark:bg-neutral-900/85 md:p-5"
+              >
+                <p id="kpi-total-label" class="text-xs font-medium uppercase tracking-wide text-neutral-500"></p>
+                <p id="kpi-total" class="mt-1 font-display text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+                  —
+                </p>
+              </div>
+              <div
+                class="rounded-2xl border border-maza-carmine/35 bg-white p-4 shadow-sm dark:border-red-900/45 dark:bg-neutral-900/85 md:p-5"
+              >
+                <p id="kpi-crit-label" class="text-xs font-medium uppercase tracking-wide text-neutral-500"></p>
+                <p id="kpi-crit" class="mt-1 font-display text-2xl font-bold text-maza-carmine">—</p>
+              </div>
+              <div
+                class="rounded-2xl border border-neutral-300/90 bg-white p-4 shadow-sm dark:border-neutral-600/50 dark:bg-neutral-900/85 md:p-5"
+              >
+                <p id="kpi-avg-label" class="text-xs font-medium uppercase tracking-wide text-neutral-500"></p>
+                <p id="kpi-avg" class="mt-1 font-display text-2xl font-bold text-neutral-700 dark:text-neutral-200">
+                  —
+                </p>
+              </div>
+              <div
+                class="rounded-2xl border border-neutral-300/90 bg-white p-4 shadow-sm dark:border-neutral-600/50 dark:bg-neutral-900/85 md:p-5"
+              >
+                <p id="kpi-last-label" class="text-xs font-medium uppercase tracking-wide text-neutral-500"></p>
+                <p id="kpi-last" class="mt-1 text-sm font-semibold leading-snug text-neutral-800 dark:text-neutral-200">
+                  —
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section
+            class="rounded-2xl border border-neutral-300/90 bg-white p-4 shadow-sm dark:border-neutral-600/50 dark:bg-neutral-900/85 sm:p-6"
+            aria-labelledby="tier-heading"
+          >
+            <h2 id="tier-heading" class="font-display text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              <span id="tier-section-title"></span>
+            </h2>
+            <div id="tier-bar" class="mt-4 flex h-8 w-full overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-800"></div>
+            <ul id="tier-legend" class="mt-3 flex flex-wrap gap-3 text-xs sm:text-sm"></ul>
+          </section>
+
+          <section aria-labelledby="compare-heading">
+            <h2 id="compare-heading" class="font-display text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              <span id="compare-section-title"></span>
+            </h2>
+            <div
+              id="player-cards"
+              class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            ></div>
+          </section>
+
+          <section
+            class="rounded-2xl border border-neutral-300/90 bg-white p-4 shadow-sm dark:border-neutral-600/50 dark:bg-neutral-900/85 sm:p-6"
+            aria-labelledby="combo-heading"
+          >
+            <h2 id="combo-heading" class="font-display text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              <span id="combo-section-title"></span>
+            </h2>
+            <ul id="combo-list" class="mt-4 space-y-2"></ul>
+            <button
+              type="button"
+              id="combo-more"
+              class="mt-3 hidden text-sm font-semibold text-neutral-800 underline decoration-neutral-500 decoration-2 underline-offset-4 hover:text-neutral-600 dark:text-neutral-200 dark:decoration-neutral-400 dark:hover:text-neutral-100"
+            ></button>
+          </section>
+
+          <section
+            class="rounded-2xl border border-neutral-300/90 bg-white p-4 shadow-sm dark:border-neutral-600/50 dark:bg-neutral-900/85 sm:p-6"
+            aria-labelledby="play-heading"
+          >
+            <h2 id="play-heading" class="font-display text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              <span id="play-section-title"></span>
+            </h2>
+            <ol id="play-list" class="mt-4 list-decimal space-y-2 pl-5"></ol>
+            <button
+              type="button"
+              id="play-more"
+              class="mt-3 hidden text-sm font-semibold text-neutral-800 underline decoration-neutral-500 decoration-2 underline-offset-4 hover:text-neutral-600 dark:text-neutral-200 dark:decoration-neutral-400 dark:hover:text-neutral-100"
+            ></button>
+          </section>
+
+          <section
+            class="rounded-2xl border border-neutral-300/90 bg-white p-4 shadow-sm dark:border-neutral-600/50 dark:bg-neutral-900/85 sm:p-6"
+            aria-labelledby="audit-heading"
+          >
+            <h2 id="audit-heading" class="font-display text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+              <span id="audit-section-title"></span>
+            </h2>
+            <div id="audit-stats" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /**
+       * MAZA Shield — single-file demo
+       * Typography: Inter (matches mazalab.com). EN / ES / PT. Dark default.
+       */
+      (function () {
+        var LANG = "en";
+        var DEMO_RUN = false;
+        var COMBO_EXPANDED = false;
+        var PLAY_EXPANDED = false;
+        var EXPORT_OPEN = false;
+
+        var T = {
+          en: {
+            ribbon: "MAZAShield Casino Risk Intelligence by MAZALab",
+            headerTagline: "Casino Risk Intelligence",
+            subtitle: "Explainable Risk Intelligence for Casino Operations",
+            liveAssess: "Live assessment",
+            runDemo: "Run Full Demo",
+            exportReport: "Export Report",
+            exportQuick: "Quick Report PDF",
+            exportFull: "Full Report PDF",
+            emptyMsg:
+              'Run <strong>Run Full Demo</strong> to load assessments, risk tiers, and operator playbook data.',
+            kpiTotal: "Total assessments",
+            kpiCrit: "Critical count",
+            kpiAvg: "Avg risk",
+            kpiLast: "Last run",
+            tierTitle: "Risk tier distribution",
+            compareTitle: "Comparative overview",
+            comboTitle: "Adaptive combos detected",
+            playTitle: "Operator playbook",
+            auditTitle: "Audit log overview",
+            showMore: "Show more",
+            showLess: "Show less",
+            entities: "entities",
+            score: "Score",
+            drivers: "Top drivers",
+            auditEvents: "Events (24h)",
+            auditAppend: "Append-only writes",
+            auditLatency: "p95 latency",
+            auditCompliance: "Compliance OK",
+            tierLow: "Low",
+            tierMed: "Medium",
+            tierHigh: "High",
+            tierCrit: "Critical",
+            quickReportTitle: "MAZA Shield — Quick Report",
+            fullReportTitle: "MAZA Shield — Full Report",
+          },
+          es: {
+            ribbon: "MAZAShield Casino Risk Intelligence by MAZALab",
+            headerTagline: "Inteligencia de riesgo para casinos",
+            subtitle: "Inteligencia de riesgo explicable para operaciones de casino",
+            liveAssess: "Evaluación en vivo",
+            runDemo: "Ejecutar demo completa",
+            exportReport: "Exportar informe",
+            exportQuick: "Informe PDF breve",
+            exportFull: "Informe PDF completo",
+            emptyMsg:
+              'Pulsa <strong>Ejecutar demo completa</strong> para cargar evaluaciones, niveles de riesgo y playbook del operador.',
+            kpiTotal: "Evaluaciones totales",
+            kpiCrit: "Críticos",
+            kpiAvg: "Riesgo medio",
+            kpiLast: "Última ejecución",
+            tierTitle: "Distribución por nivel de riesgo",
+            compareTitle: "Vista comparativa",
+            comboTitle: "Combos adaptativos detectados",
+            playTitle: "Playbook del operador",
+            auditTitle: "Resumen de auditoría",
+            showMore: "Ver más",
+            showLess: "Ver menos",
+            entities: "entidades",
+            score: "Puntuación",
+            drivers: "Factores clave",
+            auditEvents: "Eventos (24h)",
+            auditAppend: "Escrituras append-only",
+            auditLatency: "Latencia p95",
+            auditCompliance: "Cumplimiento OK",
+            tierLow: "Bajo",
+            tierMed: "Medio",
+            tierHigh: "Alto",
+            tierCrit: "Crítico",
+            quickReportTitle: "MAZA Shield — Informe breve",
+            fullReportTitle: "MAZA Shield — Informe completo",
+          },
+          pt: {
+            ribbon: "MAZAShield Casino Risk Intelligence by MAZALab",
+            headerTagline: "Inteligência de risco para casinos",
+            subtitle: "Inteligência de risco explicável para operações de casino",
+            liveAssess: "Avaliação ao vivo",
+            runDemo: "Executar demo completa",
+            exportReport: "Exportar relatório",
+            exportQuick: "Relatório PDF resumido",
+            exportFull: "Relatório PDF completo",
+            emptyMsg:
+              'Clique em <strong>Executar demo completa</strong> para carregar avaliações, níveis de risco e playbook do operador.',
+            kpiTotal: "Avaliações totais",
+            kpiCrit: "Críticos",
+            kpiAvg: "Risco médio",
+            kpiLast: "Última execução",
+            tierTitle: "Distribuição por nível de risco",
+            compareTitle: "Visão comparativa",
+            comboTitle: "Combinações adaptativas detectadas",
+            playTitle: "Playbook do operador",
+            auditTitle: "Resumo de auditoria",
+            showMore: "Ver mais",
+            showLess: "Ver menos",
+            entities: "entidades",
+            score: "Pontuação",
+            drivers: "Principais fatores",
+            auditEvents: "Eventos (24h)",
+            auditAppend: "Gravações append-only",
+            auditLatency: "Latência p95",
+            auditCompliance: "Conformidade OK",
+            tierLow: "Baixo",
+            tierMed: "Médio",
+            tierHigh: "Alto",
+            tierCrit: "Crítico",
+            quickReportTitle: "MAZA Shield — Relatório resumido",
+            fullReportTitle: "MAZA Shield — Relatório completo",
+          },
+        };
+
+        var MOCK = {
+          players: [
+            {
+              name: "A. Mercer",
+              entities: 4,
+              tier: "critical",
+              score: 91.2,
+              drivers: ["Velocity spike", "Cross-terminal pattern", "Chip redemption burst"],
+            },
+            {
+              name: "L. Okonkwo",
+              entities: 3,
+              tier: "high",
+              score: 76.4,
+              drivers: ["Session clustering", "Marker escalation"],
+            },
+            {
+              name: "R. Santos",
+              entities: 5,
+              tier: "high",
+              score: 72.8,
+              drivers: ["Table hop cadence", "Comp accrual mismatch"],
+            },
+            {
+              name: "J. Vance",
+              entities: 2,
+              tier: "medium",
+              score: 54.1,
+              drivers: ["Soft limit proximity"],
+            },
+            {
+              name: "K. Nguyen",
+              entities: 6,
+              tier: "medium",
+              score: 48.0,
+              drivers: ["Identity alias drift"],
+            },
+            {
+              name: "M. Rossi",
+              entities: 2,
+              tier: "low",
+              score: 22.5,
+              drivers: ["Baseline patron"],
+            },
+          ],
+          tiers: { low: 18, medium: 32, high: 28, critical: 22 },
+          combos: [
+            { label: "High-velocity slots + cage buy-in within 12 min", synergy: 14.2 },
+            { label: "Shared device fingerprint across 3 player IDs", synergy: 11.8 },
+            { label: "Marker + table game loss correlation (session)", synergy: 9.4 },
+            { label: "Comp redemption ahead of playthrough threshold", synergy: 8.1 },
+            { label: "Cross-property chip walk pattern", synergy: 7.3 },
+            { label: "Collusion-prone seating + correlated bets", synergy: 6.9 },
+          ],
+          playbook: [
+            "Freeze incremental comps; route to pit supervisor for table review.",
+            "Request enhanced ID check at cage for linked aliases.",
+            "Enable extended session logging on terminals T-12 through T-18.",
+            "Notify AML queue with pre-filled SAR narrative draft.",
+            "Schedule soft interview with host; document outcome in audit trail.",
+            "Apply temporary bet velocity cap pending analyst review.",
+            "Escalate to gaming commission template if jurisdictional flags fire.",
+          ],
+          audit: { events: 18420, append: 18420, latencyMs: 118, compliancePct: 100 },
+        };
+
+        function tr() {
+          return T[LANG] || T.en;
+        }
+
+        function tierColor(tier) {
+          var map = {
+            low: "bg-emerald-500",
+            medium: "bg-amber-500",
+            high: "bg-orange-600",
+            critical: "bg-maza-carmine",
+          };
+          return map[tier] || "bg-neutral-400";
+        }
+
+        function tierBorder(tier) {
+          var map = {
+            low: "border-emerald-500/40",
+            medium: "border-amber-500/40",
+            high: "border-orange-600/40",
+            critical: "border-maza-carmine/50",
+          };
+          return map[tier] || "border-neutral-400";
+        }
+
+        function tierLabelKey(tier) {
+          var t0 = tr();
+          if (tier === "low") return t0.tierLow;
+          if (tier === "medium") return t0.tierMed;
+          if (tier === "high") return t0.tierHigh;
+          return t0.tierCrit;
+        }
+
+        function applyI18n() {
+          var t0 = tr();
+          document.getElementById("ribbon-text").textContent = t0.ribbon;
+          document.getElementById("header-tagline").textContent = t0.headerTagline;
+          document.getElementById("subtitle-text").textContent = t0.subtitle;
+          document.getElementById("live-assess-label").textContent = t0.liveAssess;
+          document.getElementById("btn-run-label").textContent = t0.runDemo;
+          document.getElementById("export-btn-label").textContent = t0.exportReport;
+          document.getElementById("export-quick-label").textContent = t0.exportQuick;
+          document.getElementById("export-full-label").textContent = t0.exportFull;
+          document.getElementById("empty-msg").innerHTML = t0.emptyMsg;
+          document.getElementById("kpi-total-label").textContent = t0.kpiTotal;
+          document.getElementById("kpi-crit-label").textContent = t0.kpiCrit;
+          document.getElementById("kpi-avg-label").textContent = t0.kpiAvg;
+          document.getElementById("kpi-last-label").textContent = t0.kpiLast;
+          document.getElementById("tier-section-title").textContent = t0.tierTitle;
+          document.getElementById("compare-section-title").textContent = t0.compareTitle;
+          document.getElementById("combo-section-title").textContent = t0.comboTitle;
+          document.getElementById("play-section-title").textContent = t0.playTitle;
+          document.getElementById("audit-section-title").textContent = t0.auditTitle;
+          updateMoreButtons();
+          if (DEMO_RUN) renderDashboard();
+        }
+
+        function updateMoreButtons() {
+          var t0 = tr();
+          var cb = document.getElementById("combo-more");
+          var pb = document.getElementById("play-more");
+          if (DEMO_RUN && MOCK.combos.length > 3) {
+            cb.classList.remove("hidden");
+            cb.textContent = COMBO_EXPANDED ? t0.showLess : t0.showMore;
+          } else cb.classList.add("hidden");
+          if (DEMO_RUN && MOCK.playbook.length > 3) {
+            pb.classList.remove("hidden");
+            pb.textContent = PLAY_EXPANDED ? t0.showLess : t0.showMore;
+          } else pb.classList.add("hidden");
+        }
+
+        function renderTierBar() {
+          var bar = document.getElementById("tier-bar");
+          var leg = document.getElementById("tier-legend");
+          bar.innerHTML = "";
+          leg.innerHTML = "";
+          var tiers = MOCK.tiers;
+          var total = tiers.low + tiers.medium + tiers.high + tiers.critical;
+          var order = [
+            { key: "low", cls: "bg-emerald-500" },
+            { key: "medium", cls: "bg-amber-500" },
+            { key: "high", cls: "bg-orange-600" },
+            { key: "critical", cls: "bg-maza-carmine" },
+          ];
+          order.forEach(function (o) {
+            var pct = total ? (tiers[o.key] / total) * 100 : 0;
+            var seg = document.createElement("div");
+            seg.className = "tier-bar-seg h-full " + o.cls;
+            seg.style.width = pct.toFixed(2) + "%";
+            seg.title = tierLabelKey(o.key) + " " + pct.toFixed(1) + "%";
+            bar.appendChild(seg);
+            var li = document.createElement("li");
+            li.className = "flex items-center gap-2";
+            li.innerHTML =
+              '<span class="h-3 w-3 rounded-sm ' +
+              o.cls +
+              '"></span><span>' +
+              tierLabelKey(o.key) +
+              '</span><span class="text-neutral-500 dark:text-neutral-500">' +
+              pct.toFixed(1) +
+              "%</span>";
+            leg.appendChild(li);
+          });
+        }
+
+        function renderPlayerCards() {
+          var root = document.getElementById("player-cards");
+          root.innerHTML = "";
+          var t0 = tr();
+          MOCK.players.forEach(function (p) {
+            var card = document.createElement("article");
+            card.className =
+              "rounded-2xl border bg-white p-4 shadow-sm dark:bg-neutral-900/85 " + tierBorder(p.tier);
+            var driversHtml = p.drivers
+              .slice(0, 3)
+              .map(function (d) {
+                return '<li class="text-sm text-neutral-600 dark:text-neutral-400">' + d + "</li>";
+              })
+              .join("");
+            card.innerHTML =
+              '<h3 class="font-display font-semibold text-neutral-900 dark:text-white">' +
+              p.name +
+              '</h3><p class="mt-1 text-xs text-neutral-500">' +
+              p.entities +
+              " " +
+              t0.entities +
+              '</p><div class="mt-2 flex items-center gap-2"><span class="inline-flex rounded-full px-2 py-0.5 text-xs font-bold text-white ' +
+              tierColor(p.tier) +
+              '">' +
+              tierLabelKey(p.tier) +
+              '</span></div><p class="mt-3 text-sm"><span class="text-neutral-500">' +
+              t0.score +
+              ': </span><span class="font-mono font-bold text-neutral-800 dark:text-neutral-200">' +
+              p.score.toFixed(1) +
+              '</span></p><p class="mt-2 text-xs font-medium uppercase tracking-wide text-neutral-500">' +
+              t0.drivers +
+              '</p><ul class="mt-1 list-disc space-y-0.5 pl-4">' +
+              driversHtml +
+              "</ul>";
+            root.appendChild(card);
+          });
+        }
+
+        function renderCombos() {
+          var list = document.getElementById("combo-list");
+          list.innerHTML = "";
+          var show = COMBO_EXPANDED ? MOCK.combos : MOCK.combos.slice(0, 3);
+          show.forEach(function (c) {
+            var li = document.createElement("li");
+            li.className =
+              "rounded-lg border border-neutral-300/80 bg-maza-cream/60 px-3 py-2 text-sm dark:border-neutral-700/60 dark:bg-neutral-950/55";
+            li.innerHTML =
+              '<span class="font-medium">' +
+              c.label +
+              '</span> <span class="text-neutral-600 dark:text-neutral-400">+' +
+              c.synergy.toFixed(1) +
+              "%</span>";
+            list.appendChild(li);
+          });
+        }
+
+        function renderPlaybook() {
+          var list = document.getElementById("play-list");
+          list.innerHTML = "";
+          var show = PLAY_EXPANDED ? MOCK.playbook : MOCK.playbook.slice(0, 3);
+          show.forEach(function (a) {
+            var li = document.createElement("li");
+            li.className = "text-sm text-neutral-700 dark:text-neutral-300";
+            li.textContent = a;
+            list.appendChild(li);
+          });
+        }
+
+        function renderAudit() {
+          var root = document.getElementById("audit-stats");
+          root.innerHTML = "";
+          var t0 = tr();
+          var stats = [
+            { label: t0.auditEvents, value: MOCK.audit.events.toLocaleString(LANG) },
+            { label: t0.auditAppend, value: MOCK.audit.append.toLocaleString(LANG) },
+            { label: t0.auditLatency, value: MOCK.audit.latencyMs + " ms" },
+            { label: t0.auditCompliance, value: MOCK.audit.compliancePct + "%" },
+          ];
+          stats.forEach(function (s) {
+            var d = document.createElement("div");
+            d.className =
+              "rounded-xl border border-neutral-300/80 bg-maza-cream/40 p-3 dark:border-neutral-700/60 dark:bg-neutral-950/55";
+            d.innerHTML =
+              '<p class="text-xs text-neutral-500 dark:text-neutral-500">' +
+              s.label +
+              '</p><p class="mt-1 font-display text-lg font-bold text-neutral-900 dark:text-neutral-100">' +
+              s.value +
+              "</p>";
+            root.appendChild(d);
+          });
+        }
+
+        function renderDashboard() {
+          if (!DEMO_RUN) return;
+          document.getElementById("empty-state").classList.add("hidden");
+          document.getElementById("dashboard").classList.remove("hidden");
+          var total = MOCK.players.length;
+          var crit = MOCK.players.filter(function (p) {
+            return p.tier === "critical";
+          }).length;
+          var avg =
+            MOCK.players.reduce(function (s, p) {
+              return s + p.score;
+            }, 0) / total;
+          document.getElementById("kpi-total").textContent = String(total);
+          document.getElementById("kpi-crit").textContent = String(crit);
+          document.getElementById("kpi-avg").textContent = avg.toFixed(1);
+          document.getElementById("kpi-last").textContent = new Date().toLocaleString(LANG);
+          renderTierBar();
+          renderPlayerCards();
+          renderCombos();
+          renderPlaybook();
+          renderAudit();
+          updateMoreButtons();
+        }
+
+        function setTheme(mode) {
+          var root = document.documentElement;
+          root.setAttribute("data-theme", mode);
+          root.classList.toggle("dark", mode === "dark");
+          try {
+            localStorage.setItem("maza-shield.theme", mode);
+          } catch (e) {}
+          var m = document.getElementById("meta-theme-color");
+          if (m) m.setAttribute("content", mode === "light" ? "#fdfaf0" : "#1F1F1F");
+        }
+
+        function toggleTheme() {
+          var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          setTheme(next);
+        }
+
+        function setLang(code) {
+          LANG = code;
+          try {
+            localStorage.setItem("maza-shield.lang", code);
+          } catch (e) {}
+          document.documentElement.setAttribute("lang", code);
+          document.querySelectorAll(".lang-pill").forEach(function (b) {
+            var on = b.getAttribute("data-lang") === code;
+            b.classList.toggle("bg-neutral-800", on);
+            b.classList.toggle("text-white", on);
+            b.classList.toggle("dark:bg-neutral-700", on);
+            b.classList.toggle("text-neutral-600", !on);
+            b.classList.toggle("dark:text-neutral-300", !on);
+          });
+          applyI18n();
+        }
+
+        function toggleExport(e) {
+          if (e) e.stopPropagation();
+          EXPORT_OPEN = !EXPORT_OPEN;
+          var menu = document.getElementById("export-menu");
+          var btn = document.getElementById("btn-export-toggle");
+          menu.classList.toggle("hidden", !EXPORT_OPEN);
+          btn.setAttribute("aria-expanded", EXPORT_OPEN ? "true" : "false");
+        }
+
+        function closeExport() {
+          EXPORT_OPEN = false;
+          document.getElementById("export-menu").classList.add("hidden");
+          document.getElementById("btn-export-toggle").setAttribute("aria-expanded", "false");
+        }
+
+        function buildPrintHtml(mode) {
+          var t0 = tr();
+          var title = mode === "quick" ? t0.quickReportTitle : t0.fullReportTitle;
+          var parts = [];
+          parts.push("<h1>" + title + "</h1>");
+          parts.push("<p>MAZALab · MAZA Shield · POST /assess</p>");
+          parts.push("<p>" + new Date().toISOString() + "</p>");
+          parts.push("<h2>KPI</h2><ul>");
+          parts.push("<li>" + t0.kpiTotal + ": " + MOCK.players.length + "</li>");
+          parts.push(
+            "<li>" +
+              t0.kpiCrit +
+              ": " +
+              MOCK.players.filter(function (p) {
+                return p.tier === "critical";
+              }).length +
+              "</li>"
+          );
+          parts.push("</ul>");
+          if (mode === "full") {
+            parts.push("<h2>" + t0.compareTitle + "</h2>");
+            MOCK.players.forEach(function (p) {
+              parts.push(
+                "<p><strong>" +
+                  p.name +
+                  "</strong> — " +
+                  tierLabelKey(p.tier) +
+                  " — " +
+                  p.score.toFixed(1) +
+                  "</p>"
+              );
+            });
+            parts.push("<h2>" + t0.comboTitle + "</h2><ul>");
+            MOCK.combos.forEach(function (c) {
+              parts.push("<li>" + c.label + "</li>");
+            });
+            parts.push("</ul><h2>" + t0.playTitle + "</h2><ol>");
+            MOCK.playbook.forEach(function (a) {
+              parts.push("<li>" + a + "</li>");
+            });
+            parts.push("</ol>");
+          }
+          return (
+            "<!DOCTYPE html><html><head><meta charset='utf-8'><title>" +
+            title +
+            "</title><style>body{font-family:Inter,system-ui,sans-serif;padding:24px;max-width:800px;margin:auto}h1{font-size:1.25rem}</style></head><body>" +
+            parts.join("") +
+            "</body></html>"
+          );
+        }
+
+        function openPdf(mode) {
+          var w = window.open("", "_blank");
+          if (!w) {
+            alert("Allow pop-ups to export PDF.");
+            return;
+          }
+          w.document.write(buildPrintHtml(mode === "quick" ? "quick" : "full"));
+          w.document.close();
+          w.focus();
+          setTimeout(function () {
+            try {
+              w.print();
+            } catch (e) {}
+          }, 250);
+          closeExport();
+        }
+
+        try {
+          var ls = localStorage.getItem("maza-shield.lang");
+          if (ls === "en" || ls === "es" || ls === "pt") LANG = ls;
+        } catch (e) {}
+
+        document.getElementById("btn-run-demo").addEventListener("click", function () {
+          DEMO_RUN = true;
+          COMBO_EXPANDED = false;
+          PLAY_EXPANDED = false;
+          renderDashboard();
+        });
+
+        document.getElementById("btn-theme").addEventListener("click", toggleTheme);
+
+        document.getElementById("btn-export-toggle").addEventListener("click", toggleExport);
+
+        document.getElementById("export-quick").addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (!DEMO_RUN) {
+            alert("Run Full Demo first.");
+            closeExport();
+            return;
+          }
+          openPdf("quick");
+        });
+
+        document.getElementById("export-full").addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (!DEMO_RUN) {
+            alert("Run Full Demo first.");
+            closeExport();
+            return;
+          }
+          openPdf("full");
+        });
+
+        document.getElementById("combo-more").addEventListener("click", function () {
+          COMBO_EXPANDED = !COMBO_EXPANDED;
+          renderCombos();
+          updateMoreButtons();
+        });
+
+        document.getElementById("play-more").addEventListener("click", function () {
+          PLAY_EXPANDED = !PLAY_EXPANDED;
+          renderPlaybook();
+          updateMoreButtons();
+        });
+
+        document.addEventListener("click", function () {
+          closeExport();
+        });
+
+        document.getElementById("export-wrap").addEventListener("click", function (e) {
+          e.stopPropagation();
+        });
+
+        document.querySelectorAll(".lang-pill").forEach(function (b) {
+          b.addEventListener("click", function () {
+            setLang(b.getAttribute("data-lang"));
+          });
+        });
+
+        setLang(LANG);
+      })();
+    </script>
+  </body>
+</html>

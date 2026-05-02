@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAZAShield • Casino Risk Intelligence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .title-font { font-family: 'Inter', sans-serif; letter-spacing: -0.04em; }
+
+    /* LIGHT MODE - FULL BODY */
+    .light {
+      background-color: #f8f7f0 !important;
+      color: #1f2529 !important;
+    }
+    .light .bg-zinc-900,
+    .light .bg-zinc-800,
+    .light .bg-black,
+    .light .bg-zinc-950 {
+      background-color: #f8f7f0 !important;
+    }
+    .light .text-white,
+    .light .text-zinc-100,
+    .light .text-zinc-200 {
+      color: #1f2529 !important;
+    }
+    .light .text-zinc-400 {
+      color: #4b5563 !important;
+    }
+/* FORZAR BOTÓN RUN FULL DEMO EN LIGHT MODE */
+.light button[onclick="runFullDemo()"] {
+  background-color: #F8F7F9 !important;
+  color: #1F2529 !important;
+  border-color: #d1d5db !important;
+}
+
+.light button[onclick="runFullDemo()"] i,
+.light button[onclick="runFullDemo()"] span {
+  color: #1F2529 !important;
+}
+  </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen transition-all">
+
+  <!-- Ribbon -->
+  <div class="bg-zinc-900 border-b border-zinc-700 py-3 text-center">
+    <div class="inline-flex items-center gap-3 text-2xl font-light tracking-widest">
+      <span class="font-bold">MAZAShield</span>
+      <span class="text-xs text-zinc-500 align-super">by MAZALab</span>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto p-8">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h1 class="title-font text-7xl font-bold tracking-tighter">MAZAShield</h1>
+        <p class="text-2xl text-zinc-400 mt-1">Casino Risk Intelligence • Live Operations</p>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Language Dropdown -->
+<div class="relative">
+  <select onchange="setLang(this.value)" 
+          class="bg-zinc-900 border border-zinc-700 rounded-3xl px-6 py-3 text-white appearance-none cursor-pointer focus:outline-none w-28">
+    <option value="en" selected>EN</option>
+    <option value="es">ES</option>
+    <option value="pt">PT</option>
+  </select>
+</div>
+
+        <!-- Theme Toggle -->
+       <button onclick="toggleTheme()" class="w-12 h-12 flex items-center justify-center bg-zinc-900 hover:bg-zinc-800 border border-zinc-600 light:border-zinc-400 rounded-2xl text-2xl transition-all">
+          <i id="theme-icon" class="fas fa-moon"></i>
+        </button>
+
+        <!-- Download -->
+        <button onclick="toggleDownloadMenu()" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 light:bg-white light:border-zinc-400 light:text-zinc-900 px-6 py-4 rounded-3xl font-medium flex items-center gap-2 transition">
+          <i class="fas fa-download"></i> Download Report
+        </button>
+
+        <!-- RUN FULL DEMO BUTTON - Light Mode Fix -->
+<button onclick="runFullDemo()" 
+        class="bg-zinc-700 hover:bg-zinc-600 border border-zinc-600 px-8 py-4 rounded-3xl font-semibold flex items-center gap-3 transition-all">
+  <i class="fas fa-play"></i> 
+  <span id="demo-text">RUN FULL DEMO</span>
+</button>
+      </div>
+    </div>
+
+    <!-- Real-time Status -->
+    <div class="bg-zinc-900 border border-emerald-500/30 rounded-3xl px-6 py-4 flex items-center justify-between mb-8 text-sm">
+      <div class="flex items-center gap-8">
+        <div><span class="text-emerald-400">●</span> Motor conectado</div>
+        <div>Latencia: <span class="text-emerald-400">412 ms</span></div>
+        <div>Último assessment hace <span id="seconds-ago">14</span> segundos</div>
+      </div>
+    </div>
+
+    <!-- KPI Strip -->
+    <div id="kpi-strip" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"></div>
+
+    <!-- Player Cards -->
+    <div id="results" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+    <!-- Adaptive Combos -->
+    <div class="mt-16">
+      <h2 class="text-2xl font-semibold mb-6">Adaptive Combos Detectados</h2>
+      <div id="combos-panel" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+    </div>
+
+    <!-- Operator Playbook -->
+    <div class="mt-16">
+      <h2 class="text-2xl font-semibold mb-6">Operator Playbook</h2>
+      <div id="playbook-panel" class="space-y-4"></div>
+    </div>
+
+    <!-- Audit Log -->
+    <div class="mt-16">
+      <h2 class="text-2xl font-semibold mb-6">Audit Log Live Feed</h2>
+      <div id="audit-feed" class="bg-zinc-900 rounded-3xl p-6 max-h-96 overflow-auto text-sm"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = 'es';
+
+    const translations = {
+      en: { run: "RUN FULL DEMO", download: "Download Report" },
+      es: { run: "EJECUTAR DEMO COMPLETA", download: "Descargar Reporte" },
+      pt: { run: "EXECUTAR DEMO COMPLETA", download: "Baixar Relatório" }
+    };
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.getElementById('demo-text').textContent = translations[lang].run;
+      document.getElementById('download-text').textContent = translations[lang].download;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('bg-zinc-700', btn.textContent.toLowerCase() === lang);
+        btn.classList.toggle('text-white', btn.textContent.toLowerCase() === lang);
+      });
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('light');
+      const icon = document.getElementById('theme-icon');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    }
+
+    function toggleDownloadMenu() {
+  // Template profesional del reporte
+  const reportHTML = `
+    <div style="font-family: Inter, Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; color: #1f2529; line-height: 1.6;">
+      <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px solid #212121;">
+        <h1 style="font-size: 28px; margin: 0; color: #1f2529;">MAZAShield</h1>
+        <p style="margin: 8px 0 0; font-size: 18px; color: #555;">Casino Risk Intelligence Report</p>
+        <p style="margin: 4px 0 0; font-size: 13px; color: #777;">by MAZALab • Confidential</p>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 14px;">
+        <div><strong>Generated:</strong> ${new Date().toLocaleString('es-ES')}</div>
+        <div><strong>Report ID:</strong> MS-${Date.now().toString().slice(-8)}</div>
+      </div>
+
+      <h2 style="font-size: 22px; border-bottom: 2px solid #1f2529; padding-bottom: 8px;">Executive Summary</h2>
+      <p style="font-size: 15px;">Se detectaron 2 entidades de alto riesgo en la sesión de prueba. Se recomienda intervención inmediata según SLA definido en el Playbook.</p>
+
+      <h3 style="margin-top: 30px;">Assessments</h3>
+      <div style="margin: 20px 0; padding: 20px; background: #f8f7f0; border-radius: 12px;">
+        <strong>Marcus Vega</strong> — Risk Score: <span style="color:#d97706; font-weight:700;">94</span><br>
+        <small>Promo Rail Stack + Velocity Spike • SLA: &lt; 15 min</small>
+      </div>
+      <div style="margin: 20px 0; padding: 20px; background: #f8f7f0; border-radius: 12px;">
+        <strong>Elena Frost</strong> — Risk Score: <span style="color:#b91c1c; font-weight:700;">91</span><br>
+        <small>Session Tilt + RG Breach • SLA: &lt; 15 min</small>
+      </div>
+
+      <div style="margin-top: 50px; font-size: 12px; color: #666; text-align: center; border-top: 1px solid #ddd; padding-top: 20px;">
+        <strong>CONFIDENCIAL • USO INTERNO ÚNICAMENTE</strong><br>
+        Este documento contiene información sensible protegida por regulaciones de juego y AML.<br>
+        Página <span id="page-number-pdf">1</span> de <span id="total-pages-pdf">1</span>
+      </div>
+    </div>
+  `;
+
+  // Crear elemento temporal
+  const element = document.createElement('div');
+  element.innerHTML = reportHTML;
+  element.style.position = 'absolute';
+  element.style.left = '-9999px';
+  document.body.appendChild(element);
+
+  const opt = {
+    margin: [15, 15, 15, 15],
+    filename: `MAZAShield_Risk_Report_${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(element).save().then(() => {
+    document.body.removeChild(element);
+    alert("✅ Reporte PDF generado y descargado correctamente (board-ready).");
+  });
+}
+
+    function runFullDemo() {
+      document.getElementById('results').classList.remove('hidden');
+      document.getElementById('results').innerHTML = `
+        <div class="bg-zinc-900 border border-amber-500/30 rounded-3xl p-8">
+          <h3 class="text-2xl font-semibold">Marcus Vega</h3>
+          <p class="text-5xl font-bold text-amber-400 mt-2">94</p>
+          <p class="text-zinc-400">Promo Rail Stack + Velocity Spike</p>
+          <button onclick="alert('Playbook abierto para Marcus Vega')" class="mt-6 w-full py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">Ver Playbook</button>
+        </div>
+        <div class="bg-zinc-900 border border-red-500/30 rounded-3xl p-8">
+          <h3 class="text-2xl font-semibold">Elena Frost</h3>
+          <p class="text-5xl font-bold text-red-400 mt-2">91</p>
+          <p class="text-zinc-400">Session Tilt + RG Breach</p>
+          <button onclick="alert('Playbook abierto para Elena Frost')" class="mt-6 w-full py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">Ver Playbook</button>
+        </div>
+      `;
+    }
+
+    // Init
+    document.getElementById('demo-text').textContent = translations[currentLang].run;
+    document.getElementById('download-text').textContent = translations[currentLang].download;
+  </script>
+</body>
+</html>

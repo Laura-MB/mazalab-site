@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+# Optional: add lint-staged or npm test when a test script exists.

@@ -1,0 +1,53 @@
+{
+  "domain": "gaming",
+  "correlationId": "g2e-week2-apex-001",
+  "entities": [
+    {
+      "id": "g2e-apex-syndicate-1",
+      "type": "person",
+      "displayName": "Aria K. Mendez",
+      "aliases": ["A. Mendez", "AriaKM", "ArMendez88"],
+      "attributes": {
+        "vip_tier": "platinum",
+        "kyc_status": "partial",
+        "device_fingerprint": "fp-a91x-shared",
+        "linked_account_ids": "vip-9981,vip-9982,vip-9983",
+        "session_length_avg_min": 312,
+        "bet_velocity_7d": "extreme",
+        "rollover_progress": 0.18,
+        "promo_redemptions_30d": 11,
+        "chargeback_history_90d": 5,
+        "disputed_deposits_90d": 4,
+        "loss_chasing_flag": true,
+        "self_exclusion_flag": false,
+        "psp_rail": "rapid-aggregator-x",
+        "stake_ramp": "aggressive",
+        "bonus_abuse_pattern": "rollover_arbitrage",
+        "fraud_pattern": "linked_chargebacks"
+      },
+      "tags": [
+        "vip",
+        "chargeback",
+        "linked-accounts",
+        "bonus-abuse",
+        "rollover-arbitrage",
+        "high-velocity-transactions",
+        "loss-chasing",
+        "shared-device",
+        "g2e-week2"
+      ],
+      "sources": [
+        {
+          "sourceId": "src-gaming-week2",
+          "sourceName": "gaming-week2-curl",
+          "sourceType": "internal",
+          "collectedAt": "2026-04-17T00:00:00Z",
+          "confidence": 0.92
+        }
+      ],
+      "confidence": { "score": 0.9, "lastUpdatedAt": "2026-04-17T00:00:00Z" },
+      "firstSeenAt": "2026-04-17T00:00:00Z",
+      "lastSeenAt": "2026-04-17T00:00:00Z"
+    }
+  ]
+}
