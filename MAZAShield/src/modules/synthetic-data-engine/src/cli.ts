@@ -24,7 +24,7 @@ async function main() {
     options: {
       events:    { type: "string", default: "100000" },
       tables:    { type: "string", default: "20" },
-      collusion: { type: "string", default: "0.10" },
+      collusion: { type: "string", default: "0.065" },
       seed:      { type: "string", default: "42" },
       outdir:    { type: "string", default: "./data/synthetic" },
       batchsize: { type: "string", default: "10000" },
