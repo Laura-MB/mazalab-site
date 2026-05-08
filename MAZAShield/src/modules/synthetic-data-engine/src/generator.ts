@@ -255,13 +255,13 @@ function* generateShoeEvents(ctx: SessionContext): Generator<CasinoEvent> {
       const tokeAmount = isColluding
         ? sampleNormal(sessionRng, 15, 5)
         : sampleNormal(sessionRng, 8, 4);
-      yield makeEvent({
-        ctx, eventType: "TOKE",
-        timestampMs: outcomeTimeMs + sampleNormal(sessionRng, 8_000, 2_000),
-        handNumber, shoePosition,
-        betAmountUsd: Math.max(1, Math.round(tokeAmount)),
-        collusionSignal: null, isCollusionEvent: false,
-      });
+        yield makeEvent({
+          ctx, eventType: "TOKE",
+          timestampMs: outcomeTimeMs + sampleNormal(sessionRng, 8_000, 2_000),
+          handNumber, shoePosition,
+          betAmountUsd: Math.max(1, Math.round(tokeAmount)),
+          collusionSignal: null, isCollusionEvent: isColluding,
+        });
     }
 
     currentTimeMs = outcomeTimeMs + sampleNormal(sessionRng, 5_000, 1_000);
