@@ -79,3 +79,6 @@ Thumbs.db
 
 # Docker
 docker-compose.override.yml
+
+# Feature Engineering output
+data/features/
