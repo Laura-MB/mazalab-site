@@ -82,3 +82,7 @@ docker-compose.override.yml
 
 # Feature Engineering output
 data/features/
+
+# Audit logs — tamper-evident, stored locally
+data/audit/
+data/audit-test/
